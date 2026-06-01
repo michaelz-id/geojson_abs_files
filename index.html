@@ -174,6 +174,24 @@
 
     let geoJsonLayer;
 
+    function onEachFeature(feature, layer) {
+      const { lga_name, lga_code, state_name, area_sqkm } = feature.properties;
+      const area = Number(area_sqkm).toLocaleString('en-AU', { maximumFractionDigits: 0 });
+      layer.bindPopup(
+        `<strong>${lga_name}</strong><br/>LGA Code: ${lga_code}<br/>${state_name} · ${area} km²`,
+        { closeButton: false, autoPan: false }
+      );
+
+      layer.on('mouseover', function () {
+        this.setStyle({ fillColor: HIGHLIGHT_FILL, weight: 2 });
+        this.openPopup();
+      });
+      layer.on('mouseout', function () {
+        geoJsonLayer.resetStyle(this);
+        this.closePopup();
+      });
+    }
+
     fetch('lga_boundaries.geojson')
       .then(r => r.json())
       .then(data => {
@@ -182,7 +200,8 @@
           `${data.features.length.toLocaleString()} LGAs · Australia`;
 
         geoJsonLayer = L.geoJSON(data, {
-          style: styleFeature
+          style: styleFeature,
+          onEachFeature: onEachFeature
         }).addTo(map);
       })
       .catch(() => {
