@@ -179,7 +179,7 @@
       const area = Number(area_sqkm).toLocaleString('en-AU', { maximumFractionDigits: 0 });
       layer.bindPopup(
         `<strong>${lga_name}</strong><br/>LGA Code: ${lga_code}<br/>${state_name} · ${area} km²`,
-        { closeButton: false, autoPan: false }
+        { closeButton: false, autoPan: true }
       );
 
       layer.on('mouseover', function () {
@@ -212,19 +212,23 @@
 
     function initSearch(layers) {
       const input = document.getElementById('search');
+      let debounceTimer;
       input.addEventListener('input', function () {
+        clearTimeout(debounceTimer);
         const query = this.value.trim().toLowerCase();
-        if (!query) {
-          map.fitBounds(AUSTRALIA_BOUNDS);
-          return;
-        }
-        const match = layers.find(
-          l => l.feature.properties.lga_name.toLowerCase().includes(query)
-        );
-        if (match) {
-          map.fitBounds(match.getBounds());
-          match.openPopup();
-        }
+        debounceTimer = setTimeout(() => {
+          if (!query) {
+            map.fitBounds(AUSTRALIA_BOUNDS);
+            return;
+          }
+          const match = layers.find(
+            l => l.feature.properties.lga_name.toLowerCase().includes(query)
+          );
+          if (match) {
+            map.fitBounds(match.getBounds());
+            match.openPopup();
+          }
+        }, 250);
       });
     }
 
@@ -232,8 +236,9 @@
       .then(r => r.json())
       .then(data => {
         document.getElementById('loading').remove();
+        const features = data.features || [];
         document.getElementById('lga-count').textContent =
-          `${data.features.length.toLocaleString()} LGAs · Australia`;
+          `${features.length.toLocaleString()} LGAs · Australia`;
 
         geoJsonLayer = L.geoJSON(data, {
           style: styleFeature,
