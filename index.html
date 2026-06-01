@@ -210,6 +210,24 @@
       legend.addTo(map);
     }
 
+    function initSearch(layers) {
+      const input = document.getElementById('search');
+      input.addEventListener('input', function () {
+        const query = this.value.trim().toLowerCase();
+        if (!query) {
+          map.fitBounds(AUSTRALIA_BOUNDS);
+          return;
+        }
+        const match = layers.find(
+          l => l.feature.properties.lga_name.toLowerCase().includes(query)
+        );
+        if (match) {
+          map.fitBounds(match.getBounds());
+          match.openPopup();
+        }
+      });
+    }
+
     fetch('lga_boundaries.geojson')
       .then(r => r.json())
       .then(data => {
@@ -223,6 +241,7 @@
         }).addTo(map);
 
         buildLegend();
+        initSearch(geoJsonLayer.getLayers());
       })
       .catch(() => {
         document.getElementById('loading').textContent =
