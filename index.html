@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Australian LGA Map</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+
+    #topbar {
+      background: #2c3e50;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 16px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.35);
+      flex-shrink: 0;
+      z-index: 1000;
+    }
+    #title {
+      color: white;
+      font-weight: 700;
+      font-size: 14px;
+      white-space: nowrap;
+    }
+    #search-wrapper {
+      flex: 1;
+      max-width: 340px;
+      position: relative;
+    }
+    #search-icon {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 12px;
+      color: rgba(255,255,255,0.6);
+      pointer-events: none;
+    }
+    #search {
+      width: 100%;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 20px;
+      padding: 6px 14px 6px 30px;
+      color: white;
+      font-size: 12px;
+      outline: none;
+    }
+    #search::placeholder { color: rgba(255,255,255,0.45); }
+    #search:focus {
+      border-color: rgba(255,255,255,0.5);
+      background: rgba(255,255,255,0.18);
+    }
+    #lga-count {
+      color: rgba(255,255,255,0.45);
+      font-size: 11px;
+      margin-left: auto;
+      white-space: nowrap;
+    }
+
+    #map {
+      flex: 1;
+      background: #1a2b3c;
+    }
+
+    #loading {
+      position: absolute;
+      top: 60px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,0.72);
+      color: white;
+      padding: 8px 18px;
+      border-radius: 4px;
+      font-size: 13px;
+      z-index: 2000;
+    }
+
+    .legend {
+      background: rgba(20,35,50,0.88);
+      border-radius: 8px;
+      padding: 10px 14px;
+      border: 1px solid rgba(255,255,255,0.1);
+      color: #ddd;
+    }
+    .legend h4 {
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: rgba(255,255,255,0.55);
+      margin-bottom: 7px;
+    }
+    .legend-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4px 14px;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 9px;
+    }
+    .legend-swatch {
+      width: 10px;
+      height: 10px;
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+  </style>
+</head>
+<body>
+  <div id="topbar">
+    <span id="title">🗺 Australian LGA Map</span>
+    <div id="search-wrapper">
+      <span id="search-icon">🔍</span>
+      <input id="search" type="text" placeholder="Search LGA name…" autocomplete="off" />
+    </div>
+    <span id="lga-count"></span>
+  </div>
+  <div id="map"></div>
+  <div id="loading">Loading LGA boundaries…</div>
+
+  <script>
+    // Placeholder — JS added in subsequent tasks
+  </script>
+</body>
+</html>
