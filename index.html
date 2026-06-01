@@ -141,6 +141,54 @@
       zoomControl: true,
       attributionControl: false
     }).fitBounds(AUSTRALIA_BOUNDS);
+
+    const STATE_COLOURS = {
+      '1': { fill: '#3498db', border: '#5dade2' }, // NSW
+      '2': { fill: '#27ae60', border: '#58d68d' }, // VIC
+      '3': { fill: '#e67e22', border: '#f0a050' }, // QLD
+      '4': { fill: '#e74c3c', border: '#f1948a' }, // SA
+      '5': { fill: '#8e44ad', border: '#bb8fce' }, // WA
+      '6': { fill: '#e91e8c', border: '#f06ab5' }, // TAS
+      '7': { fill: '#16a085', border: '#48c9b0' }, // NT
+      '8': { fill: '#7f8c8d', border: '#aab7b8' }, // ACT
+    };
+    const DEFAULT_COLOUR = { fill: '#95a5a6', border: '#bdc3c7' };
+    const HIGHLIGHT_FILL = '#f39c12';
+
+    const STATE_LABELS = {
+      '1': 'NSW', '2': 'VIC', '3': 'QLD', '4': 'SA',
+      '5': 'WA',  '6': 'TAS', '7': 'NT',  '8': 'ACT'
+    };
+
+    function styleFeature(feature) {
+      const code = String(feature.properties.state_code);
+      const colour = STATE_COLOURS[code] || DEFAULT_COLOUR;
+      return {
+        fillColor: colour.fill,
+        color: colour.border,
+        weight: 1.2,
+        fillOpacity: 0.85,
+        opacity: 1
+      };
+    }
+
+    let geoJsonLayer;
+
+    fetch('lga_boundaries.geojson')
+      .then(r => r.json())
+      .then(data => {
+        document.getElementById('loading').remove();
+        document.getElementById('lga-count').textContent =
+          `${data.features.length.toLocaleString()} LGAs · Australia`;
+
+        geoJsonLayer = L.geoJSON(data, {
+          style: styleFeature
+        }).addTo(map);
+      })
+      .catch(() => {
+        document.getElementById('loading').textContent =
+          'Failed to load LGA boundaries. Is lga_boundaries.geojson in the same directory?';
+      });
   </script>
 </body>
 </html>
