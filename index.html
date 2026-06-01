@@ -135,7 +135,12 @@
   <div id="loading">Loading LGA boundaries…</div>
 
   <script>
-    // Placeholder — JS added in subsequent tasks
+    const AUSTRALIA_BOUNDS = [[-44, 113], [-10, 154]];
+
+    const map = L.map('map', {
+      zoomControl: true,
+      attributionControl: false
+    }).fitBounds(AUSTRALIA_BOUNDS);
   </script>
 </body>
 </html>
