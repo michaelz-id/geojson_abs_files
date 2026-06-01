@@ -192,6 +192,24 @@
       });
     }
 
+    function buildLegend() {
+      const legend = L.control({ position: 'bottomright' });
+      legend.onAdd = function () {
+        const div = L.DomUtil.create('div', 'legend');
+        const items = Object.entries(STATE_LABELS)
+          .map(([code, label]) => {
+            const fill = (STATE_COLOURS[code] || DEFAULT_COLOUR).fill;
+            return `<div class="legend-item">
+          <div class="legend-swatch" style="background:${fill}"></div>${label}
+        </div>`;
+          })
+          .join('');
+        div.innerHTML = `<h4>State / Territory</h4><div class="legend-grid">${items}</div>`;
+        return div;
+      };
+      legend.addTo(map);
+    }
+
     fetch('lga_boundaries.geojson')
       .then(r => r.json())
       .then(data => {
@@ -203,6 +221,8 @@
           style: styleFeature,
           onEachFeature: onEachFeature
         }).addTo(map);
+
+        buildLegend();
       })
       .catch(() => {
         document.getElementById('loading').textContent =
